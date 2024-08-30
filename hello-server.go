@@ -1,14 +1,20 @@
 package main
+
 import (
-    "fmt"
-    "net/http"
-    )
+	"fmt"
+	"log"
+	"net/http"
+)
+
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World!")
+}
 
 func main() {
-  http.HandleFunc("/", HelloServer)
-  http.ListenAndServe(":13000", nil)
-}
-func HelloServer(w http.ResponseWriter, r
-*http.Request) {
-  fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+	http.HandleFunc("/", helloHandler)
+
+	fmt.Println("Starting server on :8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("Could not start server: %s\n", err)
+	}
 }
