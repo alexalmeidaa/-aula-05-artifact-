@@ -12,37 +12,30 @@ on:
     branches: [ "main" ]
 
 jobs:
-    upload-job-linux:
-      runs-on: ubuntu-latest
-      steps:
+  upload-job-linux:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v4
-  
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.20'
-  
-      - name: Build
-        run: go build -v ./${{ env.FILE_NAME }}
+      - name: Checando sistema operacional linux
+        run: /${{ env.FILE_NAME }}.go
 
-      - name: Upload artifact for linux
-        uses: actions/upload-artifact@v1.0.0
+      - name: Upload artefato no linux
+        uses: actions/upload-artifact@v4
         with:
           name: linux
           path: ./${{ env.FILE_NAME }}
 
+  upload-job-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checando sistema operacional windows
+        run: GOOS=windows GOARCH=amd64 /${{ env.FILE_NAME }}.go
 
-    upload-job-windows:
-      runs-on: windows-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Checando sistema operacional windows
-          run: GOOS=windows GOARCH=amd64 go build -v ./${{ env.FILE_NAME }}.go
-  
-        - name: Upload artefato no windows
-          uses: actions/upload-artifact@v4
-          with:
-            name: windows
-            path: ./${{ env.FILE_NAME }}.exe
+      - name: Upload artefato no windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: ./${{ env.FILE_NAME }}.exe
 
 
