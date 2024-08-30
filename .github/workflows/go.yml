@@ -12,12 +12,23 @@ on:
     branches: [ "main" ]
 
 jobs:
+  build-go:
+    name: Build GO
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout GO Code
+      uses: actions/checkout@v4
+    - name: Build ${{ env.FILE_NAME }} for ubuntu-latest
+      run: go build ${{ env.FILE_NAME }}.go
+    - name: Build ${{ env.FILE_NAME }} for windows-latest
+      run: GOOS=windows GOARCH=amd64 go build ${{ env.FILE_NAME }}.go
+    
   upload-job-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Checando sistema operacional linux
-        run: /${{ env.FILE_NAME }}.go
+        run: cat /etc/os-release
 
       - name: Upload artefato no linux
         uses: actions/upload-artifact@v4
@@ -30,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Checando sistema operacional windows
-        run: GOOS=windows GOARCH=amd64 /${{ env.FILE_NAME }}.go
+        run: Get-CimInstance Win32_OperatingSystem
 
       - name: Upload artefato no windows
         uses: actions/upload-artifact@v4
