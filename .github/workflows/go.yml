@@ -1,9 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: go-example
-env:
-  FILE_NAME: hello-server
+name: exercício
 
 on:
   push:
@@ -11,6 +6,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+  workflow_dispatch:
+
+env:
+  FILE_NAME: webserver
+  
 jobs:
   build-go:
     name: Build GO
@@ -48,5 +48,5 @@ jobs:
         with:
           name: windows
           path: ./${{ env.FILE_NAME }}.exe
-
-
+          if-no-files-found: warn
+          overwrite: true
